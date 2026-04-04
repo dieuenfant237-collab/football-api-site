@@ -1,10 +1,12 @@
-const express = require('express');
-const axios = require('axios');
-const app = express();
+
+const express = require('express')
+const axios = require('axios')
+
+const app = express()
 
 app.get('/', (req, res) => {
-  res.send('API Football fonctionne 🚀');
-});
+  res.send('API Football fonctionne 🚀')
+})
 
 app.get('/matches', async (req, res) => {
   try {
@@ -12,15 +14,14 @@ app.get('/matches', async (req, res) => {
       headers: {
         'x-apisports-key': '1a75b32YmFdbseEwfMCsY3lcuycW8DRN1BULcaQOBmy3FqX32UCBmwruz6S5
       }
-    });
-
-    res.json(response.data);
+    })
+    res.json(response.data)
   } catch (error) {
-    res.send('Erreur API');
+    res.send('Erreur API')
   }
-});
+})
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
-  console.log('Server running');
-});
+  console.log('Server running')
+})
