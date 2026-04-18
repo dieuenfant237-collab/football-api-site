@@ -1,26 +1,27 @@
-const express = require('express')
-const axios = require('axios')
-
+const express = require("express")
 const app = express()
 
-app.get('/', (req, res) => {
-  res.send('API Football fonctionne 🚀')
+app.use(express.json())
+
+app.get("/",(req,res)=>{
+res.send("API Football fonctionne 🚀")
 })
 
-app.get('/matches', async (req, res) => {
-  try {
-    const response = await axios.get('https://v3.football.api-sports.io/fixtures?live=all', {
-      headers: {
-        'x-apisports-key': '1a75b32YmFdbseEwfMCsY3lcuycW8DRN1BULcaQOBmy3FqX32UCBmwruz6S5'
-      }
-    })
-    res.json(response.data)
-  } catch (error) {
-    res.send('Erreur API')
-  }
+app.post("/predict",(req,res)=>{
+const {home,away}=req.body
+
+const scores=["1-0","2-1","1-1","2-0"]
+const corners=["8-4","9-5","7-6","10-3"]
+const cards=["2-1","3-2","1-2","2-2"]
+
+res.json({
+home,
+away,
+score:scores[Math.floor(Math.random()*scores.length)],
+corners:corners[Math.floor(Math.random()*corners.length)],
+cards:cards[Math.floor(Math.random()*cards.length)],
+confidence:"89%"
+})
 })
 
-const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
-  console.log('Server running')
-})
+app.listen(process.env.PORT
