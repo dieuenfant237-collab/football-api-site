@@ -1,30 +1,37 @@
+
 const express = require("express")
 const app = express()
 
 app.use(express.json())
-
-app.get("/", (req, res) => {
-  res.send("API Football fonctionne 🚀")
+app.use((req,res,next)=>{
+res.header("Access-Control-Allow-Origin","*")
+res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept")
+res.header("Access-Control-Allow-Methods","GET,POST,OPTIONS")
+next()
 })
 
-app.post("/predict", (req, res) => {
-  const { home, away } = req.body || {}
-
-  const scores = ["1-0","2-1","1-1","2-0"]
-  const corners = ["8-4","9-5","7-6","10-3"]
-  const cards = ["2-1","3-2","1-2","2-2"]
-
-  res.json({
-    home,
-    away,
-    score: scores[Math.floor(Math.random()*scores.length)],
-    corners: corners[Math.floor(Math.random()*corners.length)],
-    cards: cards[Math.floor(Math.random()*cards.length)],
-    confidence: "89%"
-  })
+app.get("/",(req,res)=>{
+res.send("API Football fonctionne 🚀")
 })
 
-const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
-  console.log("Server running on port " + PORT)
+app.post("/predict",(req,res)=>{
+const {home,away}=req.body||{}
+
+const scores=["1-0","2-1","1-1","2-0"]
+const corners=["8-4","9-5","7-6","10-3"]
+const cards=["2-1","3-2","1-2","2-2"]
+
+res.json({
+home,
+away,
+score:scores[Math.floor(Math.random()*scores.length)],
+corners:corners[Math.floor(Math.random()*corners.length)],
+cards:cards[Math.floor(Math.random()*cards.length)],
+confidence:"89%"
+})
+})
+
+const PORT=process.env.PORT||3000
+app.listen(PORT,()=>{
+console.log("Server running on port "+PORT)
 })
