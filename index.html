@@ -1,4 +1,4 @@
-
+HTML
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,10 +24,10 @@ button{width:90%;padding:15px;background:#22c55e;border:none;border-radius:10px;
 <script>
 async function analyse(){
 document.getElementById("result").innerHTML="Analyse...";
-const res = await fetch("https://game-forecast-api.p.rapidapi.com/events?status_code=NOT_STARTED",{
+const res = await fetch("https://corsproxy.io/?https://game-forecast-api.p.rapidapi.com/events?status_code=NOT_STARTED",{
 method:"GET",
 headers:{
-"X-RapidAPI-Key":"8814939dd5msh3d233e8ee7aac4bp195e8ee7aac4bp195e8cjsn592854cda7e3",
+"X-RapidAPI-Key":"8814939dd5msh3d233e8ee7aac4bp195e8cjsn592854cda7e3",
 "X-RapidAPI-Host":"game-forecast-api.p.rapidapi.com"
 }
 });
