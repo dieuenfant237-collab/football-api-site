@@ -1,51 +1,36 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GENI-ELOMOS-PRO</title>
 <style>
-body{background:#0b1730;color:white;font-family:Arial;text-align:center;padding:20px}
-input{width:90%;padding:15px;margin:10px;border-radius:10px;border:none;font-size:16px}
-button{width:90%;padding:15px;background:#22c55e;border:none;border-radius:10px;color:white;font-size:18px}
-#result{margin-top:20px;text-align:left;background:#081226;padding:15px;border-radius:10px}
+body{margin:0;font-family:Arial;background:#06142b;color:#fff}
+header{background:#0a1f44;padding:15px;text-align:center;font-weight:bold}
+.container{padding:15px}
+input{width:100%;padding:12px;margin:10px 0;border-radius:6px;border:none}
+button{width:100%;padding:14px;background:#22c55e;color:#fff;border:none;border-radius:6px;font-size:16px}
+.result{margin-top:20px;background:#0a1f44;padding:15px;border-radius:6px}
 </style>
 </head>
 <body>
-
-<h2>GENI-ELOMOS-PRO</h2>
-
+<header>GENI-ELOMOS-PRO</header>
+<div class="container">
 <input id="team1" placeholder="Equipe 1">
 <input id="team2" placeholder="Equipe 2">
 <button onclick="analyse()">Analyser</button>
-
-<div id="result"></div>
-
+<div class="result" id="result">Analyse...</div>
+</div>
 <script>
 async function analyse(){
-document.getElementById("result").innerHTML="Analyse...";
-const res = await fetch("https://corsproxy.io/?https://game-forecast-api.p.rapidapi.com/events?status_code=NOT_STARTED",{
-method:"GET",
-headers:{
-"X-RapidAPI-Key":"8814939dd5msh3d233e8ee7aac4bp195e8cjsn592854cda7e3",
-"X-RapidAPI-Host":"game-forecast-api.p.rapidapi.com"
-}
-});
-const data = await res.json();
-const m = data[0];
-document.getElementById("result").innerHTML=`
-<h3>${m.home_team} vs ${m.away_team}</h3>
-Score exact: ${m.predictions.score}<br>
-BTTS: ${m.predictions.btts}<br>
-Over 2.5: ${m.predictions.over_2_5}<br>
-MT/FT: ${m.predictions.ht_ft}<br>
-Corners: ${m.predictions.corners || "-"}<br>
-Cartons: ${m.predictions.cards || "-"}<br>
-Prob Home: ${m.predictions.home_win}<br>
-Prob Away: ${m.predictions.away_win}
-`;
+const t1=document.getElementById('team1').value
+const t2=document.getElementById('team2').value
+document.getElementById('result').innerText="Analyse en cours..."
+const r=await fetch("/api/predict",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({team1:t1,team2:t2})})
+const d=await r.json()
+document.getElementById('result').innerText=JSON.stringify(d,null,2)
 }
 </script>
-
 </body>
 </html>
