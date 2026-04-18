@@ -1,16 +1,27 @@
-const axios = require("axios")
 
-async function getPredictions(){
-const res = await axios.get("https://game-forecast-api.p.rapidapi.com/events",{
+const express=require("express")
+const fetch=require("node-fetch")
+const app=express()
+app.use(express.json())
+app.use(express.static("."))
+
+app.post("/api/predict",async(req,res)=>{
+const{team1,team2}=req.body
+try{
+const response=await fetch("https://game-forecast.p.rapidapi.com/match",{
+method:"POST",
 headers:{
-"X-RapidAPI-Key":"8814939dd5msh3d233e8ee7aac4bp195e8cjsn592854cda7e3",
-"X-RapidAPI-Host":"game-forecast-api.p.rapidapi.com"
+"Content-Type":"application/json",
+"X-RapidAPI-Key":"TA_CLE_API_ICI",
+"X-RapidAPI-Host":"game-forecast.p.rapidapi.com"
 },
-params:{
-status_code:"NOT_STARTED"
+body:JSON.stringify({team1,team2})
+})
+const data=await response.json()
+res.json(data)
+}catch(e){
+res.json({error:"API error"})
 }
 })
-return res.data
-}
 
-module.exports = { getPredictions
+app.listen(3000)
