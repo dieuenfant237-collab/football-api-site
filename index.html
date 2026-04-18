@@ -29,18 +29,18 @@ let away=document.getElementById("away").value
 let res=await fetch("https://football-api-site-production.up.railway.app/predict",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({home,away})
+body:JSON.stringify({home:home,away:away})
 })
 
 let data=await res.json()
 
-document.getElementById("result").innerHTML=`
-<div class="card">
-Score: ${data.score}<br>
-Corners: ${data.corners}<br>
-Cartons: ${data.cards}<br>
-Fiabilité: ${data.confidence}
-</div>`
+document.getElementById("result").innerHTML=
+'<div class="card">'+
+'Score: '+data.score+'<br>'+
+'Corners: '+data.corners+'<br>'+
+'Cartons: '+data.cards+'<br>'+
+'Fiabilité: '+data.confidence+
+'</div>'
 }
 </script>
 
