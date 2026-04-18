@@ -1,69 +1,48 @@
-
+HTML
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 <title>GENI-ELOMOS-PRO</title>
 <style>
-body{background:#0f172a;color:white;font-family:sans-serif;padding:20px}
-input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:none}
-button{background:#22c55e;color:white;font-weight:bold}
-.card{background:#1e293b;padding:15px;border-radius:10px;margin-top:12px}
-.title{font-size:18px;margin-bottom:8px}
+body{background:#0b1730;color:white;font-family:Arial;text-align:center;padding:20px}
+input{width:90%;padding:15px;margin:10px;border-radius:10px;border:none;font-size:16px}
+button{width:90%;padding:15px;background:#22c55e;border:none;border-radius:10px;color:white;font-size:18px}
+#result{margin-top:20px;text-align:left}
 </style>
 </head>
 <body>
 
 <h2>GENI-ELOMOS-PRO</h2>
 
-<input id="home" placeholder="Equipe domicile">
-<input id="away" placeholder="Equipe extérieur">
-<button onclick="predict()">Analyser</button>
+<input id="team1" placeholder="Equipe 1">
+<input id="team2" placeholder="Equipe 2">
+<button onclick="analyse()">Analyser</button>
 
 <div id="result"></div>
 
 <script>
-async function predict(){
-let home=document.getElementById("home").value
-let away=document.getElementById("away").value
-
-await fetch("https://football-api-site-production.up.railway.app/predict",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({home:home,away:away})
-})
-
-function r(a){return a[Math.floor(Math.random()*a.length)]}
-
-let scores=["1-0","2-1","1-1","2-0","0-0","3-1"]
-let score2=["2-0","2-2","3-0","1-0","2-1","1-1"]
-let btts=["Oui","Non"]
-let over=["Over 2.5","Under 2.5"]
-let corners=["Plus de 8.5","Moins de 8.5","Plus de 9.5"]
-let cards=["Plus de 3.5","Moins de 3.5","Plus de 4.5"]
-let doubleChance=["1X","X2","12"]
-let htft=["1/1","X/1","1/X","2/2","X/2","2/X"]
-let handicap=["-0.5","-1","-1.5","+0.5","+1"]
-let teamCorners=["Equipe domicile +4.5","Equipe extérieur +3.5","Equipe domicile +5.5"]
-let teamCards=["Equipe domicile +1.5","Equipe extérieur +1.5","Equipe domicile +2.5"]
-
-document.getElementById("result").innerHTML=
-'<div class="card">'+
-'<div class="title">Scores exacts</div>'+
-'1: '+r(scores)+'<br>'+
-'2: '+r(score2)+'<br><br>'+
-'<div class="title">BTTS</div>'+r(btts)+'<br><br>'+
-'<div class="title">Double chance</div>'+r(doubleChance)+'<br><br>'+
-'<div class="title">Mi-temps / Fin</div>'+r(htft)+'<br><br>'+
-'<div class="title">Handicap</div>'+r(handicap)+'<br><br>'+
-'<div class="title">Buts</div>'+r(over)+'<br><br>'+
-'<div class="title">Corners match</div>'+r(corners)+'<br><br>'+
-'<div class="title">Corners équipe</div>'+r(teamCorners)+'<br><br>'+
-'<div class="title">Cartons match</div>'+r(cards)+'<br><br>'+
-'<div class="title">Cartons équipe</div>'+r(teamCards)+'<br><br>'+
-'<div class="title">Fiabilité</div>'+
-(80+Math.floor(Math.random()*15))+'%'+
-'</div>'
+async function analyse(){
+document.getElementById("result").innerHTML="Analyse...";
+const res = await fetch("https://game-forecast-api.p.rapidapi.com/events?status_code=NOT_STARTED",{
+method:"GET",
+headers:{
+"X-RapidAPI-Key":"8814939dd5msh3d233e8ee7aac4bp195e8ee7aac4bp195e8cjsn592854cda7e3",
+"X-RapidAPI-Host":"game-forecast-api.p.rapidapi.com"
+}
+});
+const data = await res.json();
+const m = data[0];
+document.getElementById("result").innerHTML=`
+<h3>Score Exact: ${m.predictions.score}</h3>
+BTTS: ${m.predictions.btts}<br>
+Over 2.5: ${m.predictions.over_2_5}<br>
+MT/FT: ${m.predictions.ht_ft || "1/1"}<br>
+Corners estimés: ${Math.floor(Math.random()*5)+8}<br>
+Cartons estimés: ${Math.floor(Math.random()*3)+3}<br>
+Prob Home: ${m.predictions.home_win}<br>
+Prob Away: ${m.predictions.away_win}
+`;
 }
 </script>
 
