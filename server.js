@@ -1,37 +1,16 @@
+const axios = require("axios")
 
-const express = require("express")
-const app = express()
-
-app.use(express.json())
-app.use((req,res,next)=>{
-res.header("Access-Control-Allow-Origin","*")
-res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept")
-res.header("Access-Control-Allow-Methods","GET,POST,OPTIONS")
-next()
+async function getPredictions(){
+const res = await axios.get("https://game-forecast-api.p.rapidapi.com/events",{
+headers:{
+"X-RapidAPI-Key":"8814939dd5msh3d233e8ee7aac4bp195e8cjsn592854cda7e3",
+"X-RapidAPI-Host":"game-forecast-api.p.rapidapi.com"
+},
+params:{
+status_code:"NOT_STARTED"
+}
 })
+return res.data
+}
 
-app.get("/",(req,res)=>{
-res.send("API Football fonctionne 🚀")
-})
-
-app.post("/predict",(req,res)=>{
-const {home,away}=req.body||{}
-
-const scores=["1-0","2-1","1-1","2-0"]
-const corners=["8-4","9-5","7-6","10-3"]
-const cards=["2-1","3-2","1-2","2-2"]
-
-res.json({
-home,
-away,
-score:scores[Math.floor(Math.random()*scores.length)],
-corners:corners[Math.floor(Math.random()*corners.length)],
-cards:cards[Math.floor(Math.random()*cards.length)],
-confidence:"89%"
-})
-})
-
-const PORT=process.env.PORT||3000
-app.listen(PORT,()=>{
-console.log("Server running on port "+PORT)
-})
+module.exports = { getPredictions
