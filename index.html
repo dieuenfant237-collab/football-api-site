@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENI-ELOMOS-PRO</title>
+<style>
+body{background:#0f172a;color:white;font-family:sans-serif;padding:20px}
+input,button{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:none}
+button{background:#22c55e;color:white}
+.card{background:#1e293b;padding:15px;border-radius:10px;margin-top:10px}
+</style>
+</head>
+<body>
+
+<h2>GENI-ELOMOS-PRO</h2>
+
+<input id="home" placeholder="Equipe domicile">
+<input id="away" placeholder="Equipe extérieur">
+<button onclick="predict()">Analyser</button>
+
+<div id="result"></div>
+
+<script>
+async function predict(){
+let home=document.getElementById("home").value
+let away=document.getElementById("away").value
+
+let res=await fetch("https://football-api-site-production.up.railway.app/predict",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({home,away})
+})
+
+let data=await res.json()
+
+document.getElementById("result").innerHTML=`
+<div class="card">
+Score: ${data.score}<br>
+Corners: ${data.corners}<br>
+Cartons: ${data.cards}<br>
+Fiabilité: ${data.confidence}
+</div>`
+}
+</script>
+
+</body>
+</html>
